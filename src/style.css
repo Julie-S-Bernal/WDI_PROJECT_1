@@ -6,7 +6,7 @@
   width: 150px;
   position: relative;
 }
-
+/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/
 body {
   scroll-behavior: none;
   background: linear-gradient(358deg, #570666, #4133cd, #14896e, #b11027, #d83716, #dec939, #39d8de, #e19dbc);
