@@ -80,35 +80,44 @@ const menu = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.title_screen');
 // const $collisionBoxheight = $collisionBox.height();
 
 const keyboardControls = () => {
-  const position =__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').position();
+
   __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).keydown((e) => {
+    const position = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').position();
+    console.log(position);
     if(e.originalEvent.code === 'ArrowLeft' ) {
-      __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
-        left: '-=10px',
-        duration: 0.1
-      }, 0, 'linear');
+      if (position.left > 0){
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
+          left: '-=10px',
+          duration: 0.1
+        }, 0, 'linear');
+      }
     }
     if(e.originalEvent.code === 'ArrowRight' ) {
-      // if (position.right < 200){
+      if (position.left <= 490){
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
           left: '+=10px',
           duration: 0.1
         }, 0, 'linear');
-      // }
+      }
     }
 
     if(e.originalEvent.code === 'ArrowDown' ) {
-      __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
-        top: '+=10px',
-        duration: 0.1
-      }, 0, 'linear');
+      if (position.top <= 601) {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
+          top: '+=10px',
+          duration: 0.1
+        }, 0, 'linear');
+      }
+
     }
 
     if(e.originalEvent.code === 'ArrowUp' ) {
-      __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
-        top: '-=10px',
-        duration: 0.1
-      }, 0, 'linear');
+      if (position.top > 1) {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
+          top: '-=10px',
+          duration: 0.1
+        }, 0, 'linear');
+      }
     }
   });
 };
@@ -118,25 +127,82 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(() => {
   console.log('Starting programe');
   keyboardControls();
   createCloud();
-  setInterval(moveCloud,500);
+  setInterval(createCloud,1000);
+
+  // setInterval(moveCloud,500);
 });
 
 function createCloud() {
-
+  console.log('cloud created!');
   //identify the div that we want to append children to
   const $sky = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.sky');
-
+  const $cloud = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div class="cloud"></div>');
   //append a new div for the cloud to $sky
   $sky.append('<div class="cloud"></div>');
   console.log($sky);
+  // generate many clouds
+  $cloud.css('left', Math.floor(Math.random() * 300-150))+1;
   //animate function to move the cloud from right to left
+  moveCloud();
 }
+
+let counter = 0;
+
 function moveCloud(){
-
+  console.log('cloud is moving');
   // animate(properties[, duration][, easing][, callback])
-  __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.cloud').animate({'right': '-=50', duration: 0.1 },10000,'linear');
+  let cloud = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.cloud').position();
+
+  // console.log(cloud);
 
 
+  __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.cloud').animate({'right': '-=50'},10000,'linear', callback);
+
+  function callback() {
+    counter ++;
+    console.log(counter);
+    if (counter >= 9) {
+      console.log('ok now stop!');
+      __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.cloud').stop();
+
+    } else {
+      __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.cloud').animate({'right': '-=50'},10000,'linear', callback);
+    }
+  }
+  // detect where the divs and my div is
+  function collision($div1, $div2) {
+      var x1 = $div1.offset().left;
+      var y1 = $div1.offset().top;
+      var x2 = $div2.offset().left;
+      var y2 = $div2.offset().top;
+// collision detection
+      if ((y1 + $div1.outerHeight(true)) < y2 ||
+          y1 > (y2 + $div2.outerHeight(true)) ||
+          (x1 + $div1.outerWidth(true)) < x2  ||
+          x1 > (x2 + $div2.outerWidth(true)))
+          return false;
+      return true;
+      function getPositionCollisionBox(collisionBox){
+       return [ [ pos.left, pos.left + width ], [ pos.top, pos.top + height ] ];
+      }
+
+
+      // function comparePositions(clouda, cloudb) {
+      //  const x1 = p1[0] < p2[0] ? p1 : p2;
+      //  const x2 = p1[0] < p2[0] ? p2 : p1;
+      //  return x1[1] > x2[0] || x1[0] === x2[0] ? true : false;
+      // }
+      //
+      // function checkCollisions() {
+      //  const $collisionBox = $('.cloud')[0];
+      //  const pos = getPositionCollisionBox($collisionBsox);
+      //  const pos2 =getPosition(this);
+      //  let horizontalMatch = comparePositions(pos[0],pos[2]);
+      //  let verticalMatch = comparePositions(pos[1],pos[1]);
+      //  let match = horizontalMatch  && verticalMatch;
+      //  if (match) {$ ('body').append('<p>collision!</p>'); }
+      // }
+  }
 }
 
 
@@ -10440,7 +10506,7 @@ exports = module.exports = __webpack_require__(4)(undefined);
 
 
 // module
-exports.push([module.i, "*{\n\n}\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 100vh;\n  background: lightblue;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:250px;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.cloud {\n  width: 150px;\n  height: 100px;\n  background: blue;\n  position: relative;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n/*.big_cloud{\nbackground-size: cover;\nheight: 800%;\nwidth: 800%;\nposition: relative;\noverflow: hidden;\nanimation: cloudOne infinite 30s linear;\n}\n@keyframes cloudOne{\n0%{transform: translateX(-100%);\n}\n100%{\ntransform: translateX(100%);\n\n}\n}*/\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\nbody {\n  scroll-behavior: auto;\n  background: linear-gradient(358deg, #570666, #4133cd, #14896e, #b11027, #d83716, #dec939, #39d8de, #e19dbc);\n  background-size: 1600% 1600%;\n\n  -webkit-animation: AnimationName 59s ease infinite;\n  -moz-animation: AnimationName 59s ease infinite;\n  animation: AnimationName 59s ease infinite;\n\n  @-webkit-keyframes AnimationName {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  @-moz-keyframes AnimationName {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  @keyframes AnimationName {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  color: #333;\n  font: 100% Arial, Sans Serif;\n  height: 100vh;\n  margin: 0;\n  padding: 0;\n  overflow-x: hidden;\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n/* KEYFRAMES */\n\n@-webkit-keyframes animateCloud {\n  0% {\n    margin-left: -1000px;\n  }\n  100% {\n    margin-left: 100%;\n  }\n}\n\n@keyframes animateCloud {\n  0% {\n    margin-left: -1000px;\n  }\n  100% {\n    margin-left: 100%;\n  }\n}\n\n/* ANIMATIONS */\n\n.x1 {\n  animation: animateCloud 35s linear infinite;\n  transform: scale(0.65);\n}\n\n.x2 {\n  animation: animateCloud 20s linear infinite;\n  transform: scale(0.3);\n}\n\n.x3 {\n  animation: animateCloud 30s linear infinite;\n  transform: scale(0.5);\n}\n\n.x4 {\n  animation: animateCloud 18s linear infinite;\n  transform: scale(0.4);\n}\n\n.x5 {\n  animation: animateCloud 25s linear infinite;\n  transform: scale(0.55);\n}\n\n/* OBJECTS */\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: relative;\n  width: 350px;\n}*/\n\n/*.cloud:after, .cloud:before {\n  background: #fff;\n  content: '';\n  position: absolute;\n  z-indeX: -1;\n}\n\n.cloud:after {\n  border-radius: 100px;\n  height: 100px;\n  left: 50px;\n  top: -50px;\n  width: 100px;\n}\n\n.cloud:before {\n  border-radius: 200px;\n  width: 180px;\n  height: 180px;\n  right: 50px;\n  top: -90px;\n}*/\n", ""]);
+exports.push([module.i, "\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 100vh;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.cloud {\n  width: 150px;\n  height: 100px;\n  background: blue;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n/*.big_cloud{\nbackground-size: cover;\nheight: 800%;\nwidth: 800%;\nposition: relative;\noverflow: hidden;\nanimation: cloudOne infinite 30s linear;\n}\n@keyframes cloudOne{\n0%{transform: translateX(-100%);\n}\n100%{\ntransform: translateX(100%);\n\n}\n}*/\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\nbody {\n  scroll-behavior: auto;\n  background: linear-gradient(358deg, #570666, #4133cd, #14896e, #b11027, #d83716, #dec939, #39d8de, #e19dbc);\n  background-size: 1600% 1600%;\n\n  -webkit-animation: AnimationName 59s ease infinite;\n  -moz-animation: AnimationName 59s ease infinite;\n  animation: AnimationName 59s ease infinite;\n\n  @-webkit-keyframes AnimationName {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  @-moz-keyframes AnimationName {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  @keyframes AnimationName {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  color: #333;\n  font: 100% Arial, Sans Serif;\n  height: 100vh;\n  margin: 0;\n  padding: 0;\n  overflow-x: hidden;\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n/* KEYFRAMES */\n\n@-webkit-keyframes animateCloud {\n  0% {\n    margin-left: -1000px;\n  }\n  100% {\n    margin-left: 100%;\n  }\n}\n\n@keyframes animateCloud {\n  0% {\n    margin-left: -1000px;\n  }\n  100% {\n    margin-left: 100%;\n  }\n}\n\n/* ANIMATIONS */\n\n.x1 {\n  animation: animateCloud 35s linear infinite;\n  transform: scale(0.65);\n}\n\n.x2 {\n  animation: animateCloud 20s linear infinite;\n  transform: scale(0.3);\n}\n\n.x3 {\n  animation: animateCloud 30s linear infinite;\n  transform: scale(0.5);\n}\n\n.x4 {\n  animation: animateCloud 18s linear infinite;\n  transform: scale(0.4);\n}\n\n.x5 {\n  animation: animateCloud 25s linear infinite;\n  transform: scale(0.55);\n}\n\n/* OBJECTS */\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: relative;\n  width: 350px;\n}*/\n\n/*.cloud:after, .cloud:before {\n  background: #fff;\n  content: '';\n  position: absolute;\n  z-indeX: -1;\n}\n\n.cloud:after {\n  border-radius: 100px;\n  height: 100px;\n  left: 50px;\n  top: -50px;\n  width: 100px;\n}\n\n.cloud:before {\n  border-radius: 200px;\n  width: 180px;\n  height: 180px;\n  right: 50px;\n  top: -90px;\n}*/\n", ""]);
 
 // exports
 

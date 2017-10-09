@@ -1,18 +1,17 @@
-*{
 
-}
 
 .sky {
   margin: 0 auto;
   width: 600px;
   height: 100vh;
   background: lightblue;
+  position: relative;
 }
 
 #character {
   margin: 0 auto;
   width: 100px;
-  left:250px;
+  left:0;
   bottom: 0;
   height: 100px;
   background: red;
@@ -23,7 +22,7 @@
   width: 150px;
   height: 100px;
   background: blue;
-  position: relative;
+  position: absolute;
 }
 
 .title_screen{
