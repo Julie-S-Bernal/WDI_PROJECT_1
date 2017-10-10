@@ -18,13 +18,6 @@
   position: absolute;
 }
 
-.cloud {
-  width: 150px;
-  height: 100px;
-  background: blue;
-  position: absolute;
-}
-
 .title_screen{
   text-align: center;
   margin-left: 50px;
@@ -149,15 +142,16 @@ body {
 
 /* OBJECTS */
 
-/*.cloud {
+
+.cloud {
   background: #fff;
   background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);
   border-radius: 100px;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
   height: 120px;
-  position: relative;
-  width: 350px;
-}*/
+  position: absolute;
+  width: 250px;
+}
 
 /*.cloud:after, .cloud:before {
   background: #fff;
