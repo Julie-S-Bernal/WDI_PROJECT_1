@@ -14,7 +14,12 @@ const minCircleHeight = 20;
 const maxCircleHeight = 30;
 const minCircleWidth = 20;
 const maxCircleWidth = 30;
+const minlifeGlobeHeight = 20;
+const maxlifeGlobeHeight = 20;
+const minlifeGlobeWidth = 20;
+const maxlifeGlobeWidth = 20;
 let CreateCircles;
+let createLifeGlobes;
 let playing;
 
 let $character;
@@ -26,6 +31,8 @@ let $sky;
 let $play;
 let $titleScreen;
 let $circle;
+let $lifeGlobe;
+let $bestScore;
 
 $(init);
 
@@ -38,6 +45,7 @@ function init() {
   $sky = $('.sky');
   $play = $('#play');
   $titleScreen = $('.launch-screen');
+  $bestScore =$('#best-score');
 
   keyboardControls();
 
@@ -61,6 +69,8 @@ function begin() {
   $hearts.attr('src', 'images/heart.png');
   startCreatingClouds = setInterval(createCloud, 250);
   CreateCircles = setInterval(createCircle, 2000);
+  createLifeGlobes = setInterval(createLifeGlobe, 800);
+
 }
 
 function createCloud() {
@@ -120,10 +130,14 @@ function moveCloud(cloud) {
             $('.circle').finish().remove();
             clearInterval(startCreatingClouds);
             clearInterval(CreateCircles);
+            clearInterval(createLifeGlobes);
             $sky.hide();
             $gameOver.show();
             $reset.show();
+            // show person final score and person best score on screen
+            // store score into an array that should be displayed next game
           }
+          // if player reach level 10 with timer launch victory screen with final score and reset button
         }
       },
       complete: function() {
@@ -255,8 +269,60 @@ function moveCircle(circle) {
 
           new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
 
-          // store the div into a variable and the number of the heart (so 1 2 3 4 5 )
 
+        }
+      }
+
+    },
+  );
+}
+// REGAIN LIVES!!!!!!!!!!!!!!
+function createLifeGlobe() {
+  //identify the div that we want to append children to
+  // calculate my random spawn  of circles
+  const randomlifeGlobeTop = Math.floor(Math.random() * ($sky.height()-maxlifeGlobeHeight)) + 1;
+  const randomlifeGlobeHeight = Math.floor(Math.random() * maxlifeGlobeHeight) + minlifeGlobeHeight;
+  const randomlifeGlobeWidth = Math.floor(Math.random() * maxlifeGlobeWidth) + minlifeGlobeWidth;
+  $lifeGlobe = $('<div class="lifeGlobe"></div>');
+
+  $lifeGlobe.css({
+    top: randomlifeGlobeTop,
+    height: randomlifeGlobeHeight,
+    width: randomlifeGlobeWidth,
+  });
+
+  $sky.append($lifeGlobe);
+
+  //call to function
+  moveLifeGlobe($lifeGlobe);
+}
+
+function moveLifeGlobe(lifeGlobe) {
+  // circle -> width + height
+  const lifeGlobeDuration = 2000;
+
+  lifeGlobe.animate(
+    {
+      right: `${$(window).width() * 1.2}`
+    },
+    {
+      duration: lifeGlobeDuration,
+      easing: 'linear',
+      step: function() {
+        const $div1 = $lifeGlobe;
+        const $div2 = $character;
+
+        if (detectCollision($div1, $div2)) {
+          $div1.remove();
+          // will probably bug
+          life+= 1;
+          //get yellow heart/ not working find why?
+          const $swhichHeartYellow = $(`.heart${life}`);
+          $swhichHeartYellow.find('.heart').attr('src', 'images/heart.png');
+          // its telling me that life is not defined
+          $life.html(life);
+          // need to find a lives sound
+          // new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
 
         }
       }

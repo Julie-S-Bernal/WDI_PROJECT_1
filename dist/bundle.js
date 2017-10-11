@@ -537,7 +537,12 @@ const minCircleHeight = 20;
 const maxCircleHeight = 30;
 const minCircleWidth = 20;
 const maxCircleWidth = 30;
+const minlifeGlobeHeight = 20;
+const maxlifeGlobeHeight = 20;
+const minlifeGlobeWidth = 20;
+const maxlifeGlobeWidth = 20;
 let CreateCircles;
+let createLifeGlobes;
 let playing;
 
 let $character;
@@ -549,6 +554,8 @@ let $sky;
 let $play;
 let $titleScreen;
 let $circle;
+let $lifeGlobe;
+let $bestScore;
 
 $(init);
 
@@ -561,6 +568,7 @@ function init() {
   $sky = $('.sky');
   $play = $('#play');
   $titleScreen = $('.launch-screen');
+  $bestScore =$('#best-score');
 
   keyboardControls();
 
@@ -584,6 +592,8 @@ function begin() {
   $hearts.attr('src', 'images/heart.png');
   startCreatingClouds = setInterval(createCloud, 250);
   CreateCircles = setInterval(createCircle, 2000);
+  createLifeGlobes = setInterval(createLifeGlobe, 800);
+
 }
 
 function createCloud() {
@@ -643,10 +653,14 @@ function moveCloud(cloud) {
             $('.circle').finish().remove();
             clearInterval(startCreatingClouds);
             clearInterval(CreateCircles);
+            clearInterval(createLifeGlobes);
             $sky.hide();
             $gameOver.show();
             $reset.show();
+            // show person final score and person best score on screen
+            // store score into an array that should be displayed next game
           }
+          // if player reach level 10 with timer launch victory screen with final score and reset button
         }
       },
       complete: function() {
@@ -778,8 +792,60 @@ function moveCircle(circle) {
 
           new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
 
-          // store the div into a variable and the number of the heart (so 1 2 3 4 5 )
 
+        }
+      }
+
+    },
+  );
+}
+// REGAIN LIVES!!!!!!!!!!!!!!
+function createLifeGlobe() {
+  //identify the div that we want to append children to
+  // calculate my random spawn  of circles
+  const randomlifeGlobeTop = Math.floor(Math.random() * ($sky.height()-maxlifeGlobeHeight)) + 1;
+  const randomlifeGlobeHeight = Math.floor(Math.random() * maxlifeGlobeHeight) + minlifeGlobeHeight;
+  const randomlifeGlobeWidth = Math.floor(Math.random() * maxlifeGlobeWidth) + minlifeGlobeWidth;
+  $lifeGlobe = $('<div class="lifeGlobe"></div>');
+
+  $lifeGlobe.css({
+    top: randomlifeGlobeTop,
+    height: randomlifeGlobeHeight,
+    width: randomlifeGlobeWidth,
+  });
+
+  $sky.append($lifeGlobe);
+
+  //call to function
+  moveLifeGlobe($lifeGlobe);
+}
+
+function moveLifeGlobe(lifeGlobe) {
+  // circle -> width + height
+  const lifeGlobeDuration = 2000;
+
+  lifeGlobe.animate(
+    {
+      right: `${$(window).width() * 1.2}`
+    },
+    {
+      duration: lifeGlobeDuration,
+      easing: 'linear',
+      step: function() {
+        const $div1 = $lifeGlobe;
+        const $div2 = $character;
+
+        if (detectCollision($div1, $div2)) {
+          $div1.remove();
+          // will probably bug
+          life+= 1;
+          //get yellow heart/ not working find why?
+          const $swhichHeartYellow = $(`.heart${life}`);
+          $swhichHeartYellow.find('.heart').attr('src', 'images/heart.png');
+          // its telling me that life is not defined
+          $life.html(life);
+          // need to find a lives sound
+          // new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
 
         }
       }
@@ -11089,7 +11155,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  background: lightblue;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n#game-over {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  background: black;\n  display: none;\n}\n\n.launch-screen {\n  text-align: center;\n}\n\n#character {\n  background: red;\n  position: absolute;\n  bottom: 0;\n  width: 50px;\n  height: 50px;\n}\n\n.cloud {\n  right: 0;\n  position: absolute;\n  background: white;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n#play {\n  text-align: center;\n  width: 100%;\n  background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);\n  border:none;\n  width: 25%;\n  color:white;\n}\n\n.img{\n  background:rgba(0,0,0,0.6));\n}\n\n.launch-screen {\n  position: fixed;\n  height: 100vh;\n  width: 100%;\n  z-index: 1;\n  background: white;\n}\n.circle{\n  right: 0;\n  position: absolute;\n  background: green;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n\n\n\n\n\n\n/*\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 600px;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n#game-over{\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n#reset-button{\n  height: 100px;\n  width: 100px;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n\n#heart_style {\n  float: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: square();\n}*/\n", ""]);
+exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  background: lightblue;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n#game-over {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  background: black;\n  display: none;\n}\n\n.launch-screen {\n  text-align: center;\n}\n\n#character {\n  background: red;\n  position: absolute;\n  bottom: 0;\n  width: 50px;\n  height: 50px;\n}\n\n.cloud {\n  right: 0;\n  position: absolute;\n  background: white;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n#play {\n  text-align: center;\n  width: 100%;\n  background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);\n  border:none;\n  width: 25%;\n  color:white;\n}\n\n.img{\n  background:rgba(0,0,0,0.6));\n}\n\n.launch-screen {\n  position: fixed;\n  height: 100vh;\n  width: 100%;\n  z-index: 1;\n  background: white;\n}\n.circle{\n  right: 0;\n  position: absolute;\n  background: green;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n.lifeGlobe{\n  \n  right: 0;\n  position: absolute;\n  background: blue;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n\n}\n\n\n\n\n\n/*\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 600px;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n#game-over{\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n#reset-button{\n  height: 100px;\n  width: 100px;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n\n#heart_style {\n  float: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: square();\n}*/\n", ""]);
 
 // exports
 
