@@ -10,6 +10,11 @@ const minCloudHeight = 30;
 const maxCloudHeight = 60;
 const minCloudWidth = 30;
 const maxCloudWidth = 60;
+const minCircleHeight = 20;
+const maxCircleHeight = 30;
+const minCircleWidth = 20;
+const maxCircleWidth = 30;
+let CreateCircles;
 
 let $character;
 let $score;
@@ -19,6 +24,7 @@ let $hearts;
 let $sky;
 let $play;
 let $titleScreen;
+let $circle;
 
 $(init);
 
@@ -31,7 +37,7 @@ function init() {
   $sky = $('.sky');
   $play = $('#play');
   $titleScreen = $('.launch-screen');
-  
+
   keyboardControls();
 
   $play.on('click', start);
@@ -52,6 +58,7 @@ function begin() {
   $gameOver.hide();
   $hearts.attr('src', 'images/heart.png');
   startCreatingClouds = setInterval(createCloud, 250);
+  let CreateCircles = setInterval(createCircle, 2000);
 }
 
 function createCloud() {
@@ -105,6 +112,7 @@ function moveCloud(cloud) {
 
           if (life <= 0) {
             clearInterval(startCreatingClouds);
+            clearInterval(CreateCircle)
             $sky.hide();
             $gameOver.show();
             $reset.show();
@@ -194,5 +202,57 @@ function keyboardControls() {
   });
 }
 
-// when one min pass Level name pops on screen for 3s and then disapear, goes until level 5
-// when player reach 3 min level 3 starts,
+//new collision, + 100 points if we get them
+
+function createCircle() {
+  //identify the div that we want to append children to
+  // calculate my random spawn  of circles
+  const randomCircleTop = Math.floor(Math.random() * ($sky.height()-maxCircleHeight)) + 1;
+  const randomCircleHeight = Math.floor(Math.random() * maxCircleHeight) + minCircleHeight;
+  const randomCircleWidth = Math.floor(Math.random() * maxCircleWidth) + minCircleWidth;
+  $circle = $('<div class="circle"></div>');
+
+  $circle.css({
+    top: randomCircleTop,
+    height: randomCircleHeight,
+    width: randomCircleWidth
+  });
+
+  $sky.append($circle);
+
+  //call to function
+  moveCircle($circle);
+}
+
+function moveCircle(circle) {
+  // circle -> width + height
+  const circleDuration = 2000;
+
+  circle.animate(
+    {
+      right: `${$(window).width() * 1.2}`
+    },
+    {
+      duration: circleDuration,
+      easing: 'linear',
+      step: function() {
+        const $div1 = $circle;
+        const $div2 = $character;
+
+        if (detectCollision($div1, $div2)) {
+          $div1.remove();
+
+          defaultScore += 100;
+          $score.html(defaultScore);
+
+          new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
+
+          // store the div into a variable and the number of the heart (so 1 2 3 4 5 )
+
+
+        }
+      }
+
+    },
+  );
+}
