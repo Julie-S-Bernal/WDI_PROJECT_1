@@ -17,6 +17,8 @@ let $gameOver;
 let $reset;
 let $hearts;
 let $sky;
+let $play;
+let $titleScreen;
 
 $(init);
 
@@ -27,10 +29,19 @@ function init() {
   $reset = $('#reset-button');
   $hearts = $('.heart');
   $sky = $('.sky');
-
-  begin();
+  $play = $('#play');
+  $titleScreen = $('.launch-screen');
+  
   keyboardControls();
+
+  $play.on('click', start);
   $reset.on('click', begin);
+
+}
+
+function start() {
+  $titleScreen.hide();
+  begin();
 }
 
 function begin() {

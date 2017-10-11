@@ -540,6 +540,8 @@ let $gameOver;
 let $reset;
 let $hearts;
 let $sky;
+let $play;
+let $titleScreen;
 
 $(init);
 
@@ -550,10 +552,19 @@ function init() {
   $reset = $('#reset-button');
   $hearts = $('.heart');
   $sky = $('.sky');
-
-  begin();
+  $play = $('#play');
+  $titleScreen = $('.launch-screen');
+  
   keyboardControls();
+
+  $play.on('click', start);
   $reset.on('click', begin);
+
+}
+
+function start() {
+  $titleScreen.hide();
+  begin();
 }
 
 function begin() {
@@ -11010,7 +11021,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  background: lightblue;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n#game-over {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  background: black;\n}\n\n.launch-screen {\n  text-align: center;\n}\n\n#character {\n  background: red;\n  position: absolute;\n  bottom: 0;\n  width: 50px;\n  height: 50px;\n}\n\n.cloud {\n  right: 0;\n  position: absolute;\n  background: white;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 600px;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n#game-over{\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n#reset-button{\n  height: 100px;\n  width: 100px;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n\n#heart_style {\n  float: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: square();\n}*/\n", ""]);
+exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  background: lightblue;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n#game-over {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  background: black;\n  display: none;\n}\n\n.launch-screen {\n  text-align: center;\n}\n\n#character {\n  background: red;\n  position: absolute;\n  bottom: 0;\n  width: 50px;\n  height: 50px;\n}\n\n.cloud {\n  right: 0;\n  position: absolute;\n  background: white;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n#play {\n  text-align: center;\n  width: 100%;\n  background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);\n  border:none;\n  width: 25%;\n  color:white;\n}\n\n.img{\n  background:rgba(0,0,0,0.6));\n}\n\n.launch-screen {\n  position: fixed;\n  height: 100vh;\n  width: 100%;\n  z-index: 1;\n  background: white;\n}\n\n\n\n\n\n\n\n\n\n/*\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 600px;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n#game-over{\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n#reset-button{\n  height: 100px;\n  width: 100px;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n\n#heart_style {\n  float: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: square();\n}*/\n", ""]);
 
 // exports
 
