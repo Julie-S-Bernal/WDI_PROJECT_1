@@ -6,7 +6,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],}
+        loaders: ['style-loader', 'css-loader']}
     ]
   },
   output: {

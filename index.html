@@ -3,32 +3,31 @@
 <head>
   <meta charset="utf-8">
   <title>WDI Project 1</title>
+  <script src="./dist/bundle.js"></script>
 </head>
 <body>
+  <div id="game-over">
+    Game Over
+    <button id="reset-button">Replay</button>
+  </div>
+
+  <!-- <div class='launch-screen'>
+    <button id="play">Play</button>
+  </div> -->
+
   <div class="sky">
-    <script src="./dist/bundle.js"></script>
-    <div id="character"><img src=""/></div>
-            <div class="title_screen"><img src=""/></div>
-    </div>
     <div id="heart_style">
-      <div class="heart5"><img src="images/heart.png"/></div>
-      <div class="heart4"><img src="images/heart.png"/></div>
-      <div class="heart3"> <img src="images/heart.png"/></div>
-      <div class="heart2"> <img src="images/heart.png"/></div>
-      <div class="heart1"> <img src="images/heart.png"/></div>
+      <div class="heart5"><img class="heart" src="images/heart.png"/></div>
+      <div class="heart4"><img class="heart" src="images/heart.png"/></div>
+      <div class="heart3"><img class="heart" src="images/heart.png"/></div>
+      <div class="heart2"><img class="heart" src="images/heart.png"/></div>
+      <div class="heart1"><img class="heart" src="images/heart.png"/></div>
       <div class="score-board">
-        Score: <span class="score">500</span>
+        Score: <span id="score">500</span>
       </div>
     </div>
+
+    <div id="character"></div>
+  </div>
 </body>
 </html>
-
-<!-- <div class= "title_screen">
-  <img src="images/angel.png"/>
-  <button id= "button_skin">Play</button>
-  <button id= "button_skin2">How to play</button>
-</div> -->
-
-<!-- <div class= "big_cloud">
-  <img src="images/clouds/png" />
-</div> -->

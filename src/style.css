@@ -1,48 +1,76 @@
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
 
+.sky {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  float: left;
+  overflow: hidden;
+  background: lightblue;
+}
+
+#heart_style {
+  float: right;
+  height: 300px;
+  width: 50px;
+  text-align: center;
+  z-index: 9;
+}
+
+.heart {
+  width: 50px;
+}
+
+#game-over {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background: black;
+}
+
+.launch-screen {
+  text-align: center;
+}
+
+#character {
+  background: red;
+  position: absolute;
+  bottom: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.cloud {
+  right: 0;
+  position: absolute;
+  background: white;
+  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);
+  border-radius: 100px;
+  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 .sky {
   margin: 0 auto;
   width: 600px;
-  height: 100vh;
-  float: left;
-  margin:10px;
-
-  /*background: lightblue;*/
+  height: 600px;
+  background: lightblue;
   position: relative;
-  scroll-behavior: auto;
-  background: linear-gradient(358deg, #570666, #4133cd, #14896e, #b11027, #d83716, #dec939, #39d8de, #e19dbc);
-  background-size: 1600% 1600%;
-  scroll-behavior: auto;
-  -webkit-animation: animate_bg 20s ease infinite;
-  -moz-animation: animate_bg 59s ease infinite;
-  animation: animate_bg 59s ease infinite;
-/*check on background animator, problem with my background values*/
-/*https://www.gradient-animator.com/*/
-}
-
-@keyframes animate_bg {
-    0%   {background:#b11027,;}
-    25%  {background:#570666;}
-    50% {background:#b11027,;}
-    50% {background:#b11027,;}
-
-
-}
-@-moz-keyframes Animate_bg{
-  0%{background-position:42% 0%}
-  50%{background-position:59% 100%}
-  100%{background-position:42% 0%}
-}
-
-@-webkit-keyframes animate_bg {
-    0%   {background:red;}
-    50%  {background:green;}
-    100% {background:blue;}
-}
-@-moz-keyframes Animate_bg{
-  0%{background-position:42% 0%}
-  50%{background-position:59% 100%}
-  100%{background-position:42% 0%}
 }
 
 #character {
@@ -80,68 +108,33 @@ img {
 div.heart2{
   top:auto;
 }
-
-/*#heart_style {
-  position: fixed;
-  top: 10px;
-  display: inline-block;
-  width: 50px;
-}
-
-.heart-yellow {
+#game-over{
+  height: 100vh;
   width: 100%;
-  height: 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin-bottom: 5px;
-}*/
-/*.big_cloud{
-background-size: cover;
-height: 800%;
-width: 800%;
-position: relative;
-overflow: hidden;
-animation: cloudOne infinite 30s linear;
+  position: fixed;
+  background: white;
+  top: 0;
+  display: none;
 }
-@keyframes cloudOne{
-0%{transform: translateX(-100%);
+#reset-button{
+  height: 100px;
+  width: 100px;
+  position: fixed;
+  background: white;
+  top: 0;
+  display: none;
 }
-100%{
-transform: translateX(100%);
 
+#heart_style {
+  float: left;
 }
-}*/
+
 
 /*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/
-body {
+/*body {
 
 background: white;
-  -webkit-animation: AnimationName 59s ease infinite;
-  -moz-animation: AnimationName 59s ease infinite;
-  animation: AnimationName 59s ease infinite;
 
-  @-webkit-keyframes Animate_bg {
-    0%{background-position:42% 0%}
-    50%{background-position:59% 100%}
-    100%{background-position:42% 0%}
-  }
-  @-moz-keyframes Animate_bg{
-    0%{background-position:42% 0%}
-    50%{background-position:59% 100%}
-    100%{background-position:42% 0%}
-  }
-  @keyframes AnimationName {
-    0%{background-position:42% 0%}
-    50%{background-position:59% 100%}
-    100%{background-position:42% 0%}
-  }
-  color: #333;
-  font: 100% Arial, Sans Serif;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
 }
 
 #background-wrap {
@@ -155,38 +148,10 @@ background: white;
 }
 
 
-
-/* ANIMATIONS */
-
-.x1 {
-  animation: animateCloud 35s linear infinite;
-  transform: scale(0.65);
-}
-
-.x2 {
-  animation: animateCloud 20s linear infinite;
-  transform: scale(0.3);
-}
-
-.x3 {
-  animation: animateCloud 30s linear infinite;
-  transform: scale(0.5);
-}
-
-.x4 {
-  animation: animateCloud 18s linear infinite;
-  transform: scale(0.4);
-}
-
-.x5 {
-  animation: animateCloud 25s linear infinite;
-  transform: scale(0.55);
-}
-
 /* OBJECTS */
 
 
-.cloud {
+/*.cloud {
   background: #fff;
   background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);
   border-radius: 100px;
@@ -194,5 +159,5 @@ background: white;
   height: 120px;
   position: absolute;
   width: 250px;
-  shape-outside: circle();
-}
+  shape-outside: square();
+}*/

@@ -60,182 +60,658 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
 
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
 
-const css = __webpack_require__(2);
-const menu = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.title_screen');
-const $scoreBoard = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.score-board');
-const $score = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.score');
-let  life = 5;
-let defaultScore = 500;
-
-
-const keyboardControls = () => {
-
-  __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).keydown((e) => {
-    const position = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').position();
-    if(e.originalEvent.code === 'ArrowLeft' ) {
-      if (position.left > 0){
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
-          left: '-=10px',
-          duration: 0.1
-        }, 0, 'linear');
-      }
-    }
-    if(e.originalEvent.code === 'ArrowRight' ) {
-      if (position.left <= 490){
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
-          left: '+=10px',
-          duration: 0.1
-        }, 0, 'linear');
-      }
-    }
-
-    if(e.originalEvent.code === 'ArrowDown' ) {
-      if (position.top <= 601) {
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
-          top: '+=10px',
-          duration: 0.1
-        }, 0, 'linear');
-      }
-
-    }
-
-    if(e.originalEvent.code === 'ArrowUp' ) {
-      if (position.top > 1) {
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character').animate({
-          top: '-=10px',
-          duration: 0.1
-        }, 0, 'linear');
-      }
-    }
-  });
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
 };
 
-let $character = null;
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
 
-// assign my key movement to
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(() => {
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
 
-  $character = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('#character');
-  console.log('this is the character', $character);
-  keyboardControls();
-  createCloud();
-  setInterval(createCloud,2000);
-  detectCollision();
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
 
-
-
-});
-
-function createCloud() {
-  //identify the div that we want to append children to
-  const $sky = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.sky');
-
-  // calculate my random spawn
-  const randomTop = Math.floor(Math.random() * 400) + 1;
-  const randomHeight = Math.floor(Math.random() * 120) + 50;
-  const randomWidth = Math.floor(Math.random() * 100) + 80;
-
-  const $cloud = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('<div class="cloud"></div>');
-  $sky.append($cloud);
-  // generate many clouds
-  __WEBPACK_IMPORTED_MODULE_0_jquery___default()($cloud).css({'top': randomTop, 'height': randomHeight,'width': randomWidth});
-  //call to function
-  moveCloud($cloud);
+	return [content].join('\n');
 }
 
-function moveCloud(cloud){
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
 
-  // cloud -> width + height
-  const cloudWidth = parseInt(cloud.css('width'));
-  const cloudDuration = parseInt(`${cloudWidth * 4}0`);
-  cloud.animate(
-    {
-      'left': '600'
-    },
-    {
-      duration: cloudDuration,
-      easing: 'linear',
-      complete: function() {
-        cloud.remove();
-      },
-      step: function() {
-        if (!detectCollision(cloud, $character)) {
-          console.log('you lost a life');
-          //remove cloud after collision
-          // $(cloud).explode();
-          cloud.remove();
-          defaultScore++;
-      console.log(defaultScore);
-      $score.text(defaultScore);
-
-
-          new Audio('sound/387834__ryansitz__poof.wav').play();
-
-          // $.playSound('./387834__ryansitz__poof.wav')
-
-          // store the div into a variable and the number of the heart (so 1 2 3 4 5 )
-          const whichHeart = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`.heart${life}`);
-          __WEBPACK_IMPORTED_MODULE_0_jquery___default()((whichHeart[0]).children).attr('src', 'images/heart (1).png');
-
-          life--;
-
-
-
-          if (life === 0) {
-            console.log('game over');
-          }
-
-          console.log(life);
-          $score.text(life);
-        }
-        // }else {
-        //   life === 0
-        //   console.log(game Over)
-        //   // display menu and  score board
-        // }
-        //   // -50 points when hit cloud, user starts at 500
-        // document.getElementsByClassName('heart1')img.attr("/", img.attr("images/heartbl.png").replace();;// decrement lives
-
-        // if lives === 0 game over
-      }
-
-    }
-
-  );
-}
-
-// detect where character and cloud are
-function detectCollision(divA, divB) {
-  var x1 = divA.offset().left;
-  var y1 = divA.offset().top;
-  var x2 = divB.offset().left;
-  var y2 = divB.offset().top;
-  // collision detection
-  if ((y1 + divA.outerHeight(true)) < y2 ||
-  y1 > (y2 + divB.outerHeight(true)) ||
-  (x1 + divA.outerWidth(true)) < x2  ||
-  x1 > (x2 + divB.outerWidth(true))){
-    return true;
-  }
-  return false;
+	return '/*# ' + data + ' */';
 }
 
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			var styleTarget = fn.call(this, selector);
+			// Special case to return head of iframe instead of iframe itself
+			if (styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[selector] = styleTarget;
+		}
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(6);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+$ = __webpack_require__(3);
+__webpack_require__(9);
+__webpack_require__(4);
+// require('./debug.css');
+
+let defaultScore;
+let startCreatingClouds;
+let life;
+const minCloudHeight = 30;
+const maxCloudHeight = 60;
+const minCloudWidth = 30;
+const maxCloudWidth = 60;
+
+let $character;
+let $score;
+let $gameOver;
+let $reset;
+let $hearts;
+let $sky;
+
+$(init);
+
+function init() {
+  $score = $('#score');
+  $character = $('#character');
+  $gameOver = $('#game-over');
+  $reset = $('#reset-button');
+  $hearts = $('.heart');
+  $sky = $('.sky');
+
+  begin();
+  keyboardControls();
+  $reset.on('click', begin);
+}
+
+function begin() {
+  life = 5;
+  defaultScore = 500;
+  $sky.show();
+  $score.html(defaultScore);
+  $gameOver.hide();
+  $hearts.attr('src', 'images/heart.png');
+  startCreatingClouds = setInterval(createCloud, 250);
+}
+
+function createCloud() {
+  //identify the div that we want to append children to
+  // calculate my random spawn
+  const randomTop = Math.floor(Math.random() * ($sky.height()-maxCloudHeight)) + 1;
+  const randomHeight = Math.floor(Math.random() * maxCloudHeight) + minCloudHeight;
+  const randomWidth = Math.floor(Math.random() * maxCloudWidth) + minCloudWidth;
+  const $cloud = $('<div class="cloud"></div>');
+
+  $cloud.css({
+    top: randomTop,
+    height: randomHeight,
+    width: randomWidth
+  });
+
+  $sky.append($cloud);
+
+  //call to function
+  moveCloud($cloud);
+}
+
+function moveCloud(cloud) {
+  // cloud -> width + height
+  const cloudDuration = 3000;
+
+  cloud.animate(
+    {
+      right: `${$(window).width() * 1.2}`
+    },
+    {
+      duration: cloudDuration,
+      easing: 'linear',
+      step: function() {
+        const $div1 = $(this);
+        const $div2 = $character;
+
+        if (detectCollision($div1, $div2)) {
+          $div1.remove();
+
+          defaultScore -= 50;
+          $score.html(defaultScore);
+
+          new Audio('sound/387834__ryansitz__poof.wav').play();
+
+          // store the div into a variable and the number of the heart (so 1 2 3 4 5 )
+          const $whichHeart = $(`.heart${life}`);
+          $whichHeart.find('.heart').attr('src', 'images/heart (1).png');
+
+          life--;
+
+          if (life <= 0) {
+            clearInterval(startCreatingClouds);
+            $sky.hide();
+            $gameOver.show();
+            $reset.show();
+          }
+        }
+      },
+      complete: function() {
+        $(this).remove();
+      }
+    },
+  );
+}
+
+// detect where character and cloud are
+function detectCollision($div1, $div2) {
+  var x1 = $div1.offset().left;
+  var y1 = $div1.offset().top;
+  var h1 = $div1.outerHeight(true);
+  var w1 = $div1.outerWidth(true);
+  var b1 = y1 + h1;
+  var r1 = x1 + w1;
+  var x2 = $div2.offset().left;
+  var y2 = $div2.offset().top;
+  var h2 = $div2.outerHeight(true);
+  var w2 = $div2.outerWidth(true);
+  var b2 = y2 + h2;
+  var r2 = x2 + w2;
+
+  if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+  return true;
+}
+
+// assign my key movement to
+function keyboardControls() {
+  $(document).keydown(e => {
+    const position = $character.position();
+    if (e.originalEvent.code === 'ArrowLeft') {
+      if (position.left > 0) {
+        $character.animate(
+          {
+            left: '-=10px',
+            duration: 0.1
+          },
+          0,
+          'linear'
+        );
+      }
+    }
+    if (e.originalEvent.code === 'ArrowRight') {
+      if (position.left <= $sky.width()) {
+        $character.animate(
+          {
+            left: '+=10px',
+            duration: 0.1
+          },
+          0,
+          'linear'
+        );
+      }
+    }
+
+    if (e.originalEvent.code === 'ArrowDown') {
+      if (position.top <= $sky.height()-$character.height()) {
+        $character.animate(
+          {
+            top: '+=10px',
+            duration: 0.1
+          },
+          0,
+          'linear'
+        );
+      }
+    }
+
+    if (e.originalEvent.code === 'ArrowUp') {
+      if (position.top > 1) {
+        $character.animate(
+          {
+            top: '-=10px',
+            duration: 0.1
+          },
+          0,
+          'linear'
+        );
+      }
+    }
+  });
+}
+
+// when one min pass Level name pops on screen for 3s and then disapear, goes until level 5
+// when player reach 3 min level 3 starts,
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10495,13 +10971,13 @@ return jQuery;
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(3);
+var content = __webpack_require__(5);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -10509,7 +10985,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(5)(content, options);
+var update = __webpack_require__(1)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -10526,471 +11002,17 @@ if(false) {
 }
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(0)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 100vh;\n  float: left;\n  margin:10px;\n\n  /*background: lightblue;*/\n  position: relative;\n  scroll-behavior: auto;\n  background: linear-gradient(358deg, #570666, #4133cd, #14896e, #b11027, #d83716, #dec939, #39d8de, #e19dbc);\n  background-size: 1600% 1600%;\n  scroll-behavior: auto;\n  -webkit-animation: animate_bg 20s ease infinite;\n  -moz-animation: animate_bg 59s ease infinite;\n  animation: animate_bg 59s ease infinite;\n/*check on background animator, problem with my background values*/\n/*https://www.gradient-animator.com/*/\n}\n\n@keyframes animate_bg {\n    0%   {background:#b11027,;}\n    25%  {background:#570666;}\n    50% {background:#b11027,;}\n    50% {background:#b11027,;}\n\n\n}\n@-moz-keyframes Animate_bg{\n  0%{background-position:42% 0%}\n  50%{background-position:59% 100%}\n  100%{background-position:42% 0%}\n}\n\n@-webkit-keyframes animate_bg {\n    0%   {background:red;}\n    50%  {background:green;}\n    100% {background:blue;}\n}\n@-moz-keyframes Animate_bg{\n  0%{background-position:42% 0%}\n  50%{background-position:59% 100%}\n  100%{background-position:42% 0%}\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n\n/*#heart_style {\n  position: fixed;\n  top: 10px;\n  display: inline-block;\n  width: 50px;\n}\n\n.heart-yellow {\n  width: 100%;\n  height: 50px;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: contain;\n  margin-bottom: 5px;\n}*/\n/*.big_cloud{\nbackground-size: cover;\nheight: 800%;\nwidth: 800%;\nposition: relative;\noverflow: hidden;\nanimation: cloudOne infinite 30s linear;\n}\n@keyframes cloudOne{\n0%{transform: translateX(-100%);\n}\n100%{\ntransform: translateX(100%);\n\n}\n}*/\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\nbody {\n\nbackground: white;\n  -webkit-animation: AnimationName 59s ease infinite;\n  -moz-animation: AnimationName 59s ease infinite;\n  animation: AnimationName 59s ease infinite;\n\n  @-webkit-keyframes Animate_bg {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  @-moz-keyframes Animate_bg{\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  @keyframes AnimationName {\n    0%{background-position:42% 0%}\n    50%{background-position:59% 100%}\n    100%{background-position:42% 0%}\n  }\n  color: #333;\n  font: 100% Arial, Sans Serif;\n  height: 100vh;\n  margin: 0;\n  padding: 0;\n  overflow-x: hidden;\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n\n/* ANIMATIONS */\n\n.x1 {\n  animation: animateCloud 35s linear infinite;\n  transform: scale(0.65);\n}\n\n.x2 {\n  animation: animateCloud 20s linear infinite;\n  transform: scale(0.3);\n}\n\n.x3 {\n  animation: animateCloud 30s linear infinite;\n  transform: scale(0.5);\n}\n\n.x4 {\n  animation: animateCloud 18s linear infinite;\n  transform: scale(0.4);\n}\n\n.x5 {\n  animation: animateCloud 25s linear infinite;\n  transform: scale(0.55);\n}\n\n/* OBJECTS */\n\n\n.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: circle();\n}\n", ""]);
+exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  background: lightblue;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n#game-over {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  background: black;\n}\n\n.launch-screen {\n  text-align: center;\n}\n\n#character {\n  background: red;\n  position: absolute;\n  bottom: 0;\n  width: 50px;\n  height: 50px;\n}\n\n.cloud {\n  right: 0;\n  position: absolute;\n  background: white;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 600px;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n#game-over{\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n#reset-button{\n  height: 100px;\n  width: 100px;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n\n#heart_style {\n  float: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: square();\n}*/\n", ""]);
 
 // exports
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-
-var stylesInDom = {};
-
-var	memoize = function (fn) {
-	var memo;
-
-	return function () {
-		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-		return memo;
-	};
-};
-
-var isOldIE = memoize(function () {
-	// Test for IE <= 9 as proposed by Browserhacks
-	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
-	// Tests for existence of standard globals is to allow style-loader
-	// to operate correctly into non-standard environments
-	// @see https://github.com/webpack-contrib/style-loader/issues/177
-	return window && document && document.all && !window.atob;
-});
-
-var getElement = (function (fn) {
-	var memo = {};
-
-	return function(selector) {
-		if (typeof memo[selector] === "undefined") {
-			var styleTarget = fn.call(this, selector);
-			// Special case to return head of iframe instead of iframe itself
-			if (styleTarget instanceof window.HTMLIFrameElement) {
-				try {
-					// This will throw an exception if access to iframe is blocked
-					// due to cross-origin restrictions
-					styleTarget = styleTarget.contentDocument.head;
-				} catch(e) {
-					styleTarget = null;
-				}
-			}
-			memo[selector] = styleTarget;
-		}
-		return memo[selector]
-	};
-})(function (target) {
-	return document.querySelector(target)
-});
-
-var singleton = null;
-var	singletonCounter = 0;
-var	stylesInsertedAtTop = [];
-
-var	fixUrls = __webpack_require__(6);
-
-module.exports = function(list, options) {
-	if (typeof DEBUG !== "undefined" && DEBUG) {
-		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-	}
-
-	options = options || {};
-
-	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
-
-	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-	// tags it will allow on a page
-	if (!options.singleton) options.singleton = isOldIE();
-
-	// By default, add <style> tags to the <head> element
-	if (!options.insertInto) options.insertInto = "head";
-
-	// By default, add <style> tags to the bottom of the target
-	if (!options.insertAt) options.insertAt = "bottom";
-
-	var styles = listToStyles(list, options);
-
-	addStylesToDom(styles, options);
-
-	return function update (newList) {
-		var mayRemove = [];
-
-		for (var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-
-			domStyle.refs--;
-			mayRemove.push(domStyle);
-		}
-
-		if(newList) {
-			var newStyles = listToStyles(newList, options);
-			addStylesToDom(newStyles, options);
-		}
-
-		for (var i = 0; i < mayRemove.length; i++) {
-			var domStyle = mayRemove[i];
-
-			if(domStyle.refs === 0) {
-				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
-
-				delete stylesInDom[domStyle.id];
-			}
-		}
-	};
-};
-
-function addStylesToDom (styles, options) {
-	for (var i = 0; i < styles.length; i++) {
-		var item = styles[i];
-		var domStyle = stylesInDom[item.id];
-
-		if(domStyle) {
-			domStyle.refs++;
-
-			for(var j = 0; j < domStyle.parts.length; j++) {
-				domStyle.parts[j](item.parts[j]);
-			}
-
-			for(; j < item.parts.length; j++) {
-				domStyle.parts.push(addStyle(item.parts[j], options));
-			}
-		} else {
-			var parts = [];
-
-			for(var j = 0; j < item.parts.length; j++) {
-				parts.push(addStyle(item.parts[j], options));
-			}
-
-			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-		}
-	}
-}
-
-function listToStyles (list, options) {
-	var styles = [];
-	var newStyles = {};
-
-	for (var i = 0; i < list.length; i++) {
-		var item = list[i];
-		var id = options.base ? item[0] + options.base : item[0];
-		var css = item[1];
-		var media = item[2];
-		var sourceMap = item[3];
-		var part = {css: css, media: media, sourceMap: sourceMap};
-
-		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
-		else newStyles[id].parts.push(part);
-	}
-
-	return styles;
-}
-
-function insertStyleElement (options, style) {
-	var target = getElement(options.insertInto)
-
-	if (!target) {
-		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
-	}
-
-	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
-
-	if (options.insertAt === "top") {
-		if (!lastStyleElementInsertedAtTop) {
-			target.insertBefore(style, target.firstChild);
-		} else if (lastStyleElementInsertedAtTop.nextSibling) {
-			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
-		} else {
-			target.appendChild(style);
-		}
-		stylesInsertedAtTop.push(style);
-	} else if (options.insertAt === "bottom") {
-		target.appendChild(style);
-	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
-		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
-		target.insertBefore(style, nextSibling);
-	} else {
-		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
-	}
-}
-
-function removeStyleElement (style) {
-	if (style.parentNode === null) return false;
-	style.parentNode.removeChild(style);
-
-	var idx = stylesInsertedAtTop.indexOf(style);
-	if(idx >= 0) {
-		stylesInsertedAtTop.splice(idx, 1);
-	}
-}
-
-function createStyleElement (options) {
-	var style = document.createElement("style");
-
-	options.attrs.type = "text/css";
-
-	addAttrs(style, options.attrs);
-	insertStyleElement(options, style);
-
-	return style;
-}
-
-function createLinkElement (options) {
-	var link = document.createElement("link");
-
-	options.attrs.type = "text/css";
-	options.attrs.rel = "stylesheet";
-
-	addAttrs(link, options.attrs);
-	insertStyleElement(options, link);
-
-	return link;
-}
-
-function addAttrs (el, attrs) {
-	Object.keys(attrs).forEach(function (key) {
-		el.setAttribute(key, attrs[key]);
-	});
-}
-
-function addStyle (obj, options) {
-	var style, update, remove, result;
-
-	// If a transform function was defined, run it on the css
-	if (options.transform && obj.css) {
-	    result = options.transform(obj.css);
-
-	    if (result) {
-	    	// If transform returns a value, use that instead of the original css.
-	    	// This allows running runtime transformations on the css.
-	    	obj.css = result;
-	    } else {
-	    	// If the transform function returns a falsy value, don't add this css.
-	    	// This allows conditional loading of css
-	    	return function() {
-	    		// noop
-	    	};
-	    }
-	}
-
-	if (options.singleton) {
-		var styleIndex = singletonCounter++;
-
-		style = singleton || (singleton = createStyleElement(options));
-
-		update = applyToSingletonTag.bind(null, style, styleIndex, false);
-		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
-
-	} else if (
-		obj.sourceMap &&
-		typeof URL === "function" &&
-		typeof URL.createObjectURL === "function" &&
-		typeof URL.revokeObjectURL === "function" &&
-		typeof Blob === "function" &&
-		typeof btoa === "function"
-	) {
-		style = createLinkElement(options);
-		update = updateLink.bind(null, style, options);
-		remove = function () {
-			removeStyleElement(style);
-
-			if(style.href) URL.revokeObjectURL(style.href);
-		};
-	} else {
-		style = createStyleElement(options);
-		update = applyToTag.bind(null, style);
-		remove = function () {
-			removeStyleElement(style);
-		};
-	}
-
-	update(obj);
-
-	return function updateStyle (newObj) {
-		if (newObj) {
-			if (
-				newObj.css === obj.css &&
-				newObj.media === obj.media &&
-				newObj.sourceMap === obj.sourceMap
-			) {
-				return;
-			}
-
-			update(obj = newObj);
-		} else {
-			remove();
-		}
-	};
-}
-
-var replaceText = (function () {
-	var textStore = [];
-
-	return function (index, replacement) {
-		textStore[index] = replacement;
-
-		return textStore.filter(Boolean).join('\n');
-	};
-})();
-
-function applyToSingletonTag (style, index, remove, obj) {
-	var css = remove ? "" : obj.css;
-
-	if (style.styleSheet) {
-		style.styleSheet.cssText = replaceText(index, css);
-	} else {
-		var cssNode = document.createTextNode(css);
-		var childNodes = style.childNodes;
-
-		if (childNodes[index]) style.removeChild(childNodes[index]);
-
-		if (childNodes.length) {
-			style.insertBefore(cssNode, childNodes[index]);
-		} else {
-			style.appendChild(cssNode);
-		}
-	}
-}
-
-function applyToTag (style, obj) {
-	var css = obj.css;
-	var media = obj.media;
-
-	if(media) {
-		style.setAttribute("media", media)
-	}
-
-	if(style.styleSheet) {
-		style.styleSheet.cssText = css;
-	} else {
-		while(style.firstChild) {
-			style.removeChild(style.firstChild);
-		}
-
-		style.appendChild(document.createTextNode(css));
-	}
-}
-
-function updateLink (link, options, obj) {
-	var css = obj.css;
-	var sourceMap = obj.sourceMap;
-
-	/*
-		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
-		and there is no publicPath defined then lets turn convertToAbsoluteUrls
-		on by default.  Otherwise default to the convertToAbsoluteUrls option
-		directly
-	*/
-	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
-
-	if (options.convertToAbsoluteUrls || autoFixUrls) {
-		css = fixUrls(css);
-	}
-
-	if (sourceMap) {
-		// http://stackoverflow.com/a/26603875
-		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-	}
-
-	var blob = new Blob([css], { type: "text/css" });
-
-	var oldSrc = link.href;
-
-	link.href = URL.createObjectURL(blob);
-
-	if(oldSrc) URL.revokeObjectURL(oldSrc);
-}
 
 
 /***/ }),
@@ -11086,6 +11108,53 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
+
+
+/***/ }),
+/* 7 */,
+/* 8 */,
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(10);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../node_modules/css-loader/index.js!./reset.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js!./reset.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\n\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n\tdisplay: block;\n}\nbody {\n\tline-height: 1;\n}\nol, ul {\n\tlist-style: none;\n}\nblockquote, q {\n\tquotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n\tcontent: '';\n\tcontent: none;\n}\ntable {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n", ""]);
+
+// exports
 
 
 /***/ })

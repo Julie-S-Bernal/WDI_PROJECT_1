@@ -5,7 +5,8 @@
   "main": "js/index.js",
   "scripts": {
     "build": "./node_modules/.bin/webpack ./src/index.js ./dist/bundle.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --single-quote --trailing-comma es5 --write \"./src/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,9 @@
   },
   "homepage": "https://github.com/Julie-S-Bernal/WDI_PROJECT_1#readme",
   "dependencies": {
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "jquery-ui": "^1.12.1",
+    "prettier": "^1.7.4"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",
