@@ -15,6 +15,7 @@ const maxCircleHeight = 30;
 const minCircleWidth = 20;
 const maxCircleWidth = 30;
 let CreateCircles;
+let playing;
 
 let $character;
 let $score;
@@ -51,6 +52,7 @@ function start() {
 }
 
 function begin() {
+  playing = true;
   life = 5;
   defaultScore = 500;
   $sky.show();
@@ -58,7 +60,7 @@ function begin() {
   $gameOver.hide();
   $hearts.attr('src', 'images/heart.png');
   startCreatingClouds = setInterval(createCloud, 250);
-  let CreateCircles = setInterval(createCircle, 2000);
+  CreateCircles = setInterval(createCircle, 2000);
 }
 
 function createCloud() {
@@ -93,6 +95,8 @@ function moveCloud(cloud) {
       duration: cloudDuration,
       easing: 'linear',
       step: function() {
+        if (!playing) return;
+
         const $div1 = $(this);
         const $div2 = $character;
 
@@ -111,8 +115,11 @@ function moveCloud(cloud) {
           life--;
 
           if (life <= 0) {
+            playing = false;
+            $('.cloud').finish().remove();
+            $('.circle').finish().remove();
             clearInterval(startCreatingClouds);
-            clearInterval(CreateCircle)
+            clearInterval(CreateCircles);
             $sky.hide();
             $gameOver.show();
             $reset.show();
@@ -142,6 +149,7 @@ function detectCollision($div1, $div2) {
   var r2 = x2 + w2;
 
   if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+
   return true;
 }
 
