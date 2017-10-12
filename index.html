@@ -6,13 +6,16 @@
   <script src="./dist/bundle.js"></script>
 </head>
 <body>
-  <div id="game-over">
-    Game Over
-    <button id="reset-button">Replay</button>
+  <div id="game-over" class="transition-screen game-over">
+    <button class="reset-button play-btns">Replay</button>
+    <img class="title-screen" src="images/gameover.svg"/>
   </div>
-
-  <div class="launch-screen">
-    <button id="play">Play</button>
+  <div id="win" class="transition-screen winner-screen">
+    <button class="reset-button play-btns">Replay</button>
+    <img class="title-screen" src="images/youwin.svg"/>
+  </div>
+  <div class="transition-screen launch-screen">
+    <button id="play" class="play-btns">Play</button>
     <img class="title-screen" src="images/titlescreen.svg"/>
   </div>
 

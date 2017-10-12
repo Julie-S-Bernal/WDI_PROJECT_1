@@ -6,7 +6,9 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader']}
+        loaders: ['style-loader', 'css-loader']
+      },
+      { test: /\.(png|jpg|gif)$/, loader: 'url-loader' }
     ]
   },
   output: {

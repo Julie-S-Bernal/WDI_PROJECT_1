@@ -36,6 +36,7 @@ let $circle;
 let $lifeGlobe;
 let $bestScore;
 let $level;
+let $youWin;
 
 $(init);
 
@@ -44,12 +45,13 @@ function init() {
   $level = $('#level');
   $character = $('#character');
   $gameOver = $('#game-over');
-  $reset = $('#reset-button');
+  $reset = $('.reset-button');
   $hearts = $('.heart');
   $sky = $('.sky');
   $play = $('#play');
   $titleScreen = $('.launch-screen');
   $bestScore =$('#best-score');
+  $youWin =$('#win');
 
   keyboardControls();
 
@@ -62,14 +64,18 @@ function start() {
   $titleScreen.hide();
   begin();
   startTimer();
+  $youWin.hide();
+  $youWin.hide();
+  $reset.hide();
 
 }
 
 function begin() {
   playing = true;
   lives = 5;
-  level = 1;
+  const level = 1;
   defaultScore = 500;
+  $level.html(level);
   $sky.show();
   $score.html(defaultScore);
   $gameOver.hide();
@@ -77,6 +83,7 @@ function begin() {
   startCreatingClouds = setInterval(createCloud, 250);
   CreateCircles = setInterval(createCircle, 2000);
   createLifeGlobes = setInterval(createLifeGlobe, 800);
+  $youWin.hide();
 
 }
 
@@ -349,15 +356,26 @@ function startTimer () {
 }
 
 function checkValue() {
-  if ( timeleft === 2 ) {
+  if ( timeleft === 5 ) {
     $level.html('2');
-  } else if  ( timeleft <= 60 ) {
-    $level = $('<div class="3"></div>').text();
-  } else if  ( timeleft <= 120 ) {
-    $level = $('<div class="4"></div>').text();
-  }  else if  ( timeleft <= 160 ) {
-    $level = $('<div class="5"></div>').text();
-  }  else  ( timeleft > 300 );
-  console.log('you win');
-
+  } else if  ( timeleft === 10 ) {
+    $level.html('3');
+  } else if  ( timeleft === 15) {
+    $level.html('4');
+  }  else if  ( timeleft === 18 ) {
+    $level.html('5');
+  }  else if ( timeleft === 20) {
+    console.log('you win');
+    $('.cloud').stop().remove();
+    $('.circle').stop().remove();
+    $('.lifeGlobe').stop().remove();
+    clearInterval(startCreatingClouds);
+    clearInterval(CreateCircles);
+    clearInterval(timer);
+    clearInterval(createLifeGlobes);
+    $sky.hide();
+    $reset.show();
+    $gameOver.hide();
+    $youWin.show();
+  }
 }

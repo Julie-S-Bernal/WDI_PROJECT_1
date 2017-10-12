@@ -4,34 +4,15 @@ html, body {
 }
 
 .sky {
+  /*background: url(../images/backgroundgame.png);
+  background-repeat: no-repeat;
+  background-size: cover;*/
   width: 100%;
   height: 100%;
   position: relative;
   float: left;
   overflow: hidden;
-  /*background: lightblue;*/
-  background: linear-gradient(266deg, #55b29a, #cea6df, #f1bce8, #d2294d, #562aa1, #7eb9f2, #dee670, #eed3e8, #eed9d3, #73d7ee);
-  background-size: 2000% 2000%;
-
--webkit-animation: background-color 55s ease infinite;
--moz-animation: background-color 55s ease infinite;
-animation: background-color 55s ease infinite;
-
-@-webkit-keyframes background-color {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 51%}
-    100%{background-position:0% 50%}
-}
-@-moz-keyframes background-color {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 51%}
-    100%{background-position:0% 50%}
-}
-@keyframes background-color {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 51%}
-    100%{background-position:0% 50%}
-}
+  background: lightblue;
 }
 
 #heart_style {
@@ -46,56 +27,92 @@ animation: background-color 55s ease infinite;
   width: 50px;
 }
 
-#game-over {
-  text-align: center;
+.transition-screen {
+  position: fixed;
   width: 100%;
-  height: 100%;
-  background: black;
+  text-align: center;
+  /*background-position: center;
+  background-repeat: no-repeat;*/
+  height: 100vh;
+  z-index: 1;
+  background: white;
+}
+
+.transition-screen img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+}
+
+.game-over {
   display: none;
 }
 
-.launch-screen {
+.game-over img {
+  width: 55%;
+}
+
+.winner-screen {
+  display: none;
+}
+
+.play-btns {
   text-align: center;
+  width: 100%;
+  background-image: linear-gradient(to right, #B993D6 0%, #faaca8 51%, #fdeff9 100%);
+  border:none;
+  width: 25%;
+  color:white;
+  position: absolute;
+  top: 70%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+  font-size: 16px;
+  padding:6px;
+  z-index: 1;
+}
+
+.reset-button{
+  top: 23%;
+  left: 50%;
+  border-radius: 2px;
+}
+
+.play-btns:hover {
+  cursor: pointer;
+}
+
+.play-btns:focus {
+  outline: none;
 }
 
 #character {
-  background: red;
+  background: url(../images/Untitled-3.png);
   position: absolute;
+  background-repeat: no-repeat;
   bottom: 0;
   width: 50px;
-  height: 50px;
+  height: 100px;
 }
 
 .cloud {
   right: 0;
+  background: url(../images/cloud.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   position: absolute;
-  background: white;
-  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);
   border-radius: 100px;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-}
-
-
-#play {
-  text-align: center;
-  width: 100%;
-  background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);
-  border:none;
-  width: 25%;
-  color:white;
 }
 
 .img{
-  background:rgba(0,0,0,0.6));
+  background:rgba(0,0,0,0.6);
 }
 
-.launch-screen {
-  position: fixed;
-  height: 100vh;
-  width: 100%;
-  z-index: 1;
-  background: white;
-}
+
 .circle{
   right: 0;
   position: absolute;
@@ -106,82 +123,82 @@ animation: background-color 55s ease infinite;
 }
 
 .lifeGlobe{
-  right: 0;
-  position: absolute;
-  background: blue;
+  color :#fff;
+  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
   background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);
   border-radius: 100px;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
+  text-align: center;
+  position: absolute;
+  right: 0;
 }
-
-
-
-
 
 /*
 
 .sky {
-  margin: 0 auto;
-  width: 600px;
-  height: 600px;
-  background: lightblue;
-  position: relative;
+margin: 0 auto;
+width: 600px;
+height: 600px;
+background: lightblue;
+position: relative;
 }
 
 #character {
-  margin: 0 auto;
-  width: 100px;
-  left:0;
-  bottom: 0;
-  height: 100px;
-  background: red;
-  position: absolute;
+margin: 0 auto;
+width: 100px;
+left:0;
+bottom: 0;
+height: 100px;
+background: red;
+position: absolute;
 }
 
 .title_screen{
-  text-align: center;
-  margin-left: 50px;
-  margin-right:50px;
-  width:0px;
-  height:0px;
-  border-left: 300px solid transparent;
-  border-right:300px solid transparent;
-  border-top: 300px solid transparent;
-  border-radius: px;
-  position:relative;
-  margin:auto;
-  top:5px;
-  left:2px;
+text-align: center;
+margin-left: 50px;
+margin-right:50px;
+width:0px;
+height:0px;
+border-left: 300px solid transparent;
+border-right:300px solid transparent;
+border-top: 300px solid transparent;
+border-radius: px;
+position:relative;
+margin:auto;
+top:5px;
+left:2px;
 }
 
 img {
- height: 5%;
- width: 5%;
- margin: 10px
+height: 5%;
+width: 5%;
+margin: 10px
 
 }
 div.heart2{
-  top:auto;
+top:auto;
 }
 #game-over{
-  height: 100vh;
-  width: 100%;
-  position: fixed;
-  background: white;
-  top: 0;
-  display: none;
+height: 100vh;
+width: 100%;
+position: fixed;
+background: white;
+top: 0;
+display: none;
 }
 #reset-button{
-  height: 100px;
-  width: 100px;
-  position: fixed;
-  background: white;
-  top: 0;
-  display: none;
+height: 100px;
+width: 100px;
+position: fixed;
+background: white;
+top: 0;
+display: none;
 }
 
 #heart_style {
-  float: left;
+float: left;
 }
 
 
@@ -193,13 +210,13 @@ background: white;
 }
 
 #background-wrap {
-  bottom: 0;
-  left: 0;
-  padding-top: 50px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: -1;
+bottom: 0;
+left: 0;
+padding-top: 50px;
+position: fixed;
+right: 0;
+top: 0;
+z-index: -1;
 }
 
 
@@ -207,12 +224,12 @@ background: white;
 
 
 /*.cloud {
-  background: #fff;
-  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);
-  border-radius: 100px;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  height: 120px;
-  position: absolute;
-  width: 250px;
-  shape-outside: square();
+background: #fff;
+background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);
+border-radius: 100px;
+box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+height: 120px;
+position: absolute;
+width: 250px;
+shape-outside: square();
 }*/
