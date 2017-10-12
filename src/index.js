@@ -7,17 +7,17 @@ let defaultScore;
 let startCreatingClouds;
 let lives;
 const minCloudHeight = 30;
-const maxCloudHeight = 60;
+const maxCloudHeight = 40;
 const minCloudWidth = 30;
-const maxCloudWidth = 60;
-const minCircleHeight = 20;
+const maxCloudWidth = 40;
+const minCircleHeight = 30;
 const maxCircleHeight = 30;
-const minCircleWidth = 20;
+const minCircleWidth = 30;
 const maxCircleWidth = 30;
-const minlifeGlobeHeight = 20;
-const maxlifeGlobeHeight = 20;
-const minlifeGlobeWidth = 20;
-const maxlifeGlobeWidth = 20;
+const minlifeGlobeHeight = 30;
+const maxlifeGlobeHeight = 30;
+const minlifeGlobeWidth = 30;
+const maxlifeGlobeWidth = 30;
 let CreateCircles;
 let createLifeGlobes;
 let playing;
@@ -356,19 +356,19 @@ function startTimer () {
 }
 
 function checkValue() {
-  if ( timeleft === 5 ) {
+  if ( timeleft === 15 ) {
     $level.html('2');
     $('body').css('background', '#7eb8df');
-  } else if  ( timeleft === 10 ) {
+  } else if  ( timeleft === 20 ) {
     $level.html('3');
     $('body').css('background', '#b01846');
-  } else if  ( timeleft === 15) {
+  } else if  ( timeleft === 35) {
     $level.html('4');
     $('body').css('background', '#551183');
-  }  else if  ( timeleft === 18 ) {
+  }  else if  ( timeleft === 50 ) {
     $level.html('5');
     $('body').css('background', '#2b0545');
-  }  else if ( timeleft === 20) {
+  }  else if ( timeleft === 70) {
     console.log('you win');
     $('.cloud').stop().remove();
     $('.circle').stop().remove();
