@@ -5,7 +5,7 @@ require('./style.css');
 
 let defaultScore;
 let startCreatingClouds;
-let life;
+let lives;
 const minCloudHeight = 30;
 const maxCloudHeight = 60;
 const minCloudWidth = 30;
@@ -21,6 +21,8 @@ const maxlifeGlobeWidth = 20;
 let CreateCircles;
 let createLifeGlobes;
 let playing;
+let timeleft = 0;
+let timer;
 
 let $character;
 let $score;
@@ -33,11 +35,13 @@ let $titleScreen;
 let $circle;
 let $lifeGlobe;
 let $bestScore;
+let $level;
 
 $(init);
 
 function init() {
   $score = $('#score');
+  $level = $('#level');
   $character = $('#character');
   $gameOver = $('#game-over');
   $reset = $('#reset-button');
@@ -57,11 +61,14 @@ function init() {
 function start() {
   $titleScreen.hide();
   begin();
+  startTimer();
+
 }
 
 function begin() {
   playing = true;
-  life = 5;
+  lives = 5;
+  level = 1;
   defaultScore = 500;
   $sky.show();
   $score.html(defaultScore);
@@ -111,6 +118,7 @@ function moveCloud(cloud) {
         const $div2 = $character;
 
         if (detectCollision($div1, $div2)) {
+          console.log('i have hit a cloud blob');
           $div1.remove();
 
           defaultScore -= 50;
@@ -118,18 +126,17 @@ function moveCloud(cloud) {
 
           new Audio('sound/387834__ryansitz__poof.wav').play();
 
-          // store the div into a variable and the number of the heart (so 1 2 3 4 5 )
-          const $whichHeart = $(`.heart${life}`);
-          $whichHeart.find('.heart').attr('src', 'images/heart (1).png');
+          lives--;
+          $($('.heart')[lives]).attr('src', 'images/heart (1).png');
 
-          life--;
-
-          if (life <= 0) {
+          if (lives <= 0) {
             playing = false;
-            $('.cloud').finish().remove();
-            $('.circle').finish().remove();
+            $('.cloud').stop().remove();
+            $('.circle').stop().remove();
+            $('.lifeGlobe').stop().remove();
             clearInterval(startCreatingClouds);
             clearInterval(CreateCircles);
+            clearInterval(timer);
             clearInterval(createLifeGlobes);
             $sky.hide();
             $gameOver.show();
@@ -258,8 +265,9 @@ function moveCircle(circle) {
       duration: circleDuration,
       easing: 'linear',
       step: function() {
-        const $div1 = $circle;
+        const $div1 = circle;
         const $div2 = $character;
+
 
         if (detectCollision($div1, $div2)) {
           $div1.remove();
@@ -268,8 +276,6 @@ function moveCircle(circle) {
           $score.html(defaultScore);
 
           new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
-
-
         }
       }
 
@@ -288,7 +294,7 @@ function createLifeGlobe() {
   $lifeGlobe.css({
     top: randomlifeGlobeTop,
     height: randomlifeGlobeHeight,
-    width: randomlifeGlobeWidth,
+    width: randomlifeGlobeWidth
   });
 
   $sky.append($lifeGlobe);
@@ -298,6 +304,7 @@ function createLifeGlobe() {
 }
 
 function moveLifeGlobe(lifeGlobe) {
+  // console.log(lifeGlobe);
   // circle -> width + height
   const lifeGlobeDuration = 2000;
 
@@ -309,24 +316,48 @@ function moveLifeGlobe(lifeGlobe) {
       duration: lifeGlobeDuration,
       easing: 'linear',
       step: function() {
-        const $div1 = $lifeGlobe;
+        const $div1 = lifeGlobe;
         const $div2 = $character;
+
+        // console.log($div1, $div2);
 
         if (detectCollision($div1, $div2)) {
           $div1.remove();
-          // will probably bug
-          life+= 1;
-          //get yellow heart/ not working find why?
-          const $swhichHeartYellow = $(`.heart${life}`);
-          $swhichHeartYellow.find('.heart').attr('src', 'images/heart.png');
-          // its telling me that life is not defined
-          $life.html(life);
-          // need to find a lives sound
-          // new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
+          console.log('i have hit a blue');
+          new Audio('sound/./Magic_Chime.mp3').play();
 
+          if (lives !== 5) {
+            $($('.heart')[lives]).attr('src', 'images/heart.png');
+            lives++;
+
+          }
         }
       }
 
     },
   );
+}
+// TIMER TO DO LEVELS
+function startTimer () {
+  timer = setInterval(() => {
+    timeleft ++;
+    console.log(timeleft);
+    // console.log(timeleft);
+    checkValue();
+  }, 1000);
+  // end timer
+}
+
+function checkValue() {
+  if ( timeleft === 2 ) {
+    $level.html('2');
+  } else if  ( timeleft <= 60 ) {
+    $level = $('<div class="3"></div>').text();
+  } else if  ( timeleft <= 120 ) {
+    $level = $('<div class="4"></div>').text();
+  }  else if  ( timeleft <= 160 ) {
+    $level = $('<div class="5"></div>').text();
+  }  else  ( timeleft > 300 );
+  console.log('you win');
+
 }

@@ -9,7 +9,29 @@ html, body {
   position: relative;
   float: left;
   overflow: hidden;
-  background: lightblue;
+  /*background: lightblue;*/
+  background: linear-gradient(266deg, #55b29a, #cea6df, #f1bce8, #d2294d, #562aa1, #7eb9f2, #dee670, #eed3e8, #eed9d3, #73d7ee);
+  background-size: 2000% 2000%;
+
+-webkit-animation: background-color 55s ease infinite;
+-moz-animation: background-color 55s ease infinite;
+animation: background-color 55s ease infinite;
+
+@-webkit-keyframes background-color {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 51%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes background-color {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 51%}
+    100%{background-position:0% 50%}
+}
+@keyframes background-color {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 51%}
+    100%{background-position:0% 50%}
+}
 }
 
 #heart_style {
@@ -83,16 +105,13 @@ html, body {
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
 }
 
-
 .lifeGlobe{
-  
   right: 0;
   position: absolute;
   background: blue;
   background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);
   border-radius: 100px;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-
 }
 
 

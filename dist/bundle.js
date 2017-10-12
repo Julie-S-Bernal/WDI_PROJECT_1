@@ -522,13 +522,13 @@ function updateLink (link, options, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 $ = __webpack_require__(3);
-__webpack_require__(9);
 __webpack_require__(4);
+__webpack_require__(7);
 // require('./debug.css');
 
 let defaultScore;
 let startCreatingClouds;
-let life;
+let lives;
 const minCloudHeight = 30;
 const maxCloudHeight = 60;
 const minCloudWidth = 30;
@@ -544,6 +544,8 @@ const maxlifeGlobeWidth = 20;
 let CreateCircles;
 let createLifeGlobes;
 let playing;
+let timeleft = 0;
+let timer;
 
 let $character;
 let $score;
@@ -556,11 +558,13 @@ let $titleScreen;
 let $circle;
 let $lifeGlobe;
 let $bestScore;
+let $level;
 
 $(init);
 
 function init() {
   $score = $('#score');
+  $level = $('#level');
   $character = $('#character');
   $gameOver = $('#game-over');
   $reset = $('#reset-button');
@@ -580,11 +584,14 @@ function init() {
 function start() {
   $titleScreen.hide();
   begin();
+  startTimer();
+
 }
 
 function begin() {
   playing = true;
-  life = 5;
+  lives = 5;
+  level = 1;
   defaultScore = 500;
   $sky.show();
   $score.html(defaultScore);
@@ -634,6 +641,7 @@ function moveCloud(cloud) {
         const $div2 = $character;
 
         if (detectCollision($div1, $div2)) {
+          console.log('i have hit a cloud blob');
           $div1.remove();
 
           defaultScore -= 50;
@@ -641,18 +649,17 @@ function moveCloud(cloud) {
 
           new Audio('sound/387834__ryansitz__poof.wav').play();
 
-          // store the div into a variable and the number of the heart (so 1 2 3 4 5 )
-          const $whichHeart = $(`.heart${life}`);
-          $whichHeart.find('.heart').attr('src', 'images/heart (1).png');
+          lives--;
+          $($('.heart')[lives]).attr('src', 'images/heart (1).png');
 
-          life--;
-
-          if (life <= 0) {
+          if (lives <= 0) {
             playing = false;
-            $('.cloud').finish().remove();
-            $('.circle').finish().remove();
+            $('.cloud').stop().remove();
+            $('.circle').stop().remove();
+            $('.lifeGlobe').stop().remove();
             clearInterval(startCreatingClouds);
             clearInterval(CreateCircles);
+            clearInterval(timer);
             clearInterval(createLifeGlobes);
             $sky.hide();
             $gameOver.show();
@@ -781,8 +788,9 @@ function moveCircle(circle) {
       duration: circleDuration,
       easing: 'linear',
       step: function() {
-        const $div1 = $circle;
+        const $div1 = circle;
         const $div2 = $character;
+
 
         if (detectCollision($div1, $div2)) {
           $div1.remove();
@@ -791,8 +799,6 @@ function moveCircle(circle) {
           $score.html(defaultScore);
 
           new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
-
-
         }
       }
 
@@ -811,7 +817,7 @@ function createLifeGlobe() {
   $lifeGlobe.css({
     top: randomlifeGlobeTop,
     height: randomlifeGlobeHeight,
-    width: randomlifeGlobeWidth,
+    width: randomlifeGlobeWidth
   });
 
   $sky.append($lifeGlobe);
@@ -821,6 +827,7 @@ function createLifeGlobe() {
 }
 
 function moveLifeGlobe(lifeGlobe) {
+  // console.log(lifeGlobe);
   // circle -> width + height
   const lifeGlobeDuration = 2000;
 
@@ -832,26 +839,50 @@ function moveLifeGlobe(lifeGlobe) {
       duration: lifeGlobeDuration,
       easing: 'linear',
       step: function() {
-        const $div1 = $lifeGlobe;
+        const $div1 = lifeGlobe;
         const $div2 = $character;
+
+        // console.log($div1, $div2);
 
         if (detectCollision($div1, $div2)) {
           $div1.remove();
-          // will probably bug
-          life+= 1;
-          //get yellow heart/ not working find why?
-          const $swhichHeartYellow = $(`.heart${life}`);
-          $swhichHeartYellow.find('.heart').attr('src', 'images/heart.png');
-          // its telling me that life is not defined
-          $life.html(life);
-          // need to find a lives sound
-          // new Audio('sound/./242501__gabrielaraujo__powerup-success.wav').play();
+          console.log('i have hit a blue');
+          new Audio('sound/./Magic_Chime.mp3').play();
 
+          if (lives !== 5) {
+            $($('.heart')[lives]).attr('src', 'images/heart.png');
+            lives++;
+
+          }
         }
       }
 
     },
   );
+}
+// TIMER TO DO LEVELS
+function startTimer () {
+  timer = setInterval(() => {
+    timeleft ++;
+    console.log(timeleft);
+    // console.log(timeleft);
+    checkValue();
+  }, 1000);
+  // end timer
+}
+
+function checkValue() {
+  if ( timeleft === 2 ) {
+    $level.html('2');
+  } else if  ( timeleft <= 60 ) {
+    $level = $('<div class="3"></div>').text();
+  } else if  ( timeleft <= 120 ) {
+    $level = $('<div class="4"></div>').text();
+  }  else if  ( timeleft <= 160 ) {
+    $level = $('<div class="5"></div>').text();
+  }  else  ( timeleft > 300 );
+  console.log('you win');
+
 }
 
 
@@ -11136,8 +11167,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js!./style.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js!./style.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js!./reset.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js!./reset.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -11155,7 +11186,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  background: lightblue;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n#game-over {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  background: black;\n  display: none;\n}\n\n.launch-screen {\n  text-align: center;\n}\n\n#character {\n  background: red;\n  position: absolute;\n  bottom: 0;\n  width: 50px;\n  height: 50px;\n}\n\n.cloud {\n  right: 0;\n  position: absolute;\n  background: white;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n#play {\n  text-align: center;\n  width: 100%;\n  background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);\n  border:none;\n  width: 25%;\n  color:white;\n}\n\n.img{\n  background:rgba(0,0,0,0.6));\n}\n\n.launch-screen {\n  position: fixed;\n  height: 100vh;\n  width: 100%;\n  z-index: 1;\n  background: white;\n}\n.circle{\n  right: 0;\n  position: absolute;\n  background: green;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n.lifeGlobe{\n  \n  right: 0;\n  position: absolute;\n  background: blue;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n\n}\n\n\n\n\n\n/*\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 600px;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n#game-over{\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n#reset-button{\n  height: 100px;\n  width: 100px;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n\n#heart_style {\n  float: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: square();\n}*/\n", ""]);
+exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\n\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n\tdisplay: block;\n}\nbody {\n\tline-height: 1;\n}\nol, ul {\n\tlist-style: none;\n}\nblockquote, q {\n\tquotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n\tcontent: '';\n\tcontent: none;\n}\ntable {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n", ""]);
 
 // exports
 
@@ -11256,15 +11287,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 7 */,
-/* 8 */,
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(10);
+var content = __webpack_require__(8);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11278,8 +11307,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js!./reset.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js!./reset.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js!./style.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -11289,7 +11318,7 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -11297,7 +11326,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\n\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n\tdisplay: block;\n}\nbody {\n\tline-height: 1;\n}\nol, ul {\n\tlist-style: none;\n}\nblockquote, q {\n\tquotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n\tcontent: '';\n\tcontent: none;\n}\ntable {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n", ""]);
+exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  /*background: lightblue;*/\n  background: linear-gradient(266deg, #55b29a, #cea6df, #f1bce8, #d2294d, #562aa1, #7eb9f2, #dee670, #eed3e8, #eed9d3, #73d7ee);\n  background-size: 2000% 2000%;\n\n-webkit-animation: background-color 55s ease infinite;\n-moz-animation: background-color 55s ease infinite;\nanimation: background-color 55s ease infinite;\n\n@-webkit-keyframes background-color {\n    0%{background-position:0% 50%}\n    50%{background-position:100% 51%}\n    100%{background-position:0% 50%}\n}\n@-moz-keyframes background-color {\n    0%{background-position:0% 50%}\n    50%{background-position:100% 51%}\n    100%{background-position:0% 50%}\n}\n@keyframes background-color {\n    0%{background-position:0% 50%}\n    50%{background-position:100% 51%}\n    100%{background-position:0% 50%}\n}\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n#game-over {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  background: black;\n  display: none;\n}\n\n.launch-screen {\n  text-align: center;\n}\n\n#character {\n  background: red;\n  position: absolute;\n  bottom: 0;\n  width: 50px;\n  height: 50px;\n}\n\n.cloud {\n  right: 0;\n  position: absolute;\n  background: white;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n#play {\n  text-align: center;\n  width: 100%;\n  background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);\n  border:none;\n  width: 25%;\n  color:white;\n}\n\n.img{\n  background:rgba(0,0,0,0.6));\n}\n\n.launch-screen {\n  position: fixed;\n  height: 100vh;\n  width: 100%;\n  z-index: 1;\n  background: white;\n}\n.circle{\n  right: 0;\n  position: absolute;\n  background: green;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n.lifeGlobe{\n  right: 0;\n  position: absolute;\n  background: blue;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n\n\n\n\n/*\n\n.sky {\n  margin: 0 auto;\n  width: 600px;\n  height: 600px;\n  background: lightblue;\n  position: relative;\n}\n\n#character {\n  margin: 0 auto;\n  width: 100px;\n  left:0;\n  bottom: 0;\n  height: 100px;\n  background: red;\n  position: absolute;\n}\n\n.title_screen{\n  text-align: center;\n  margin-left: 50px;\n  margin-right:50px;\n  width:0px;\n  height:0px;\n  border-left: 300px solid transparent;\n  border-right:300px solid transparent;\n  border-top: 300px solid transparent;\n  border-radius: px;\n  position:relative;\n  margin:auto;\n  top:5px;\n  left:2px;\n}\n\nimg {\n height: 5%;\n width: 5%;\n margin: 10px\n\n}\ndiv.heart2{\n  top:auto;\n}\n#game-over{\n  height: 100vh;\n  width: 100%;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n#reset-button{\n  height: 100px;\n  width: 100px;\n  position: fixed;\n  background: white;\n  top: 0;\n  display: none;\n}\n\n#heart_style {\n  float: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\n  bottom: 0;\n  left: 0;\n  padding-top: 50px;\n  position: fixed;\n  right: 0;\n  top: 0;\n  z-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\n  background: #fff;\n  background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n  height: 120px;\n  position: absolute;\n  width: 250px;\n  shape-outside: square();\n}*/\n", ""]);
 
 // exports
 
