@@ -23,6 +23,7 @@ let createLifeGlobes;
 let playing;
 let timeleft = 0;
 let timer;
+let backgroundInterval;
 
 let $character;
 let $score;
@@ -67,7 +68,6 @@ function start() {
   $youWin.hide();
   $youWin.hide();
   $reset.hide();
-
 }
 
 function begin() {
@@ -358,12 +358,16 @@ function startTimer () {
 function checkValue() {
   if ( timeleft === 5 ) {
     $level.html('2');
+    $('body').css('background', '#7eb8df');
   } else if  ( timeleft === 10 ) {
     $level.html('3');
+    $('body').css('background', '#b01846');
   } else if  ( timeleft === 15) {
     $level.html('4');
+    $('body').css('background', '#551183');
   }  else if  ( timeleft === 18 ) {
     $level.html('5');
+    $('body').css('background', '#2b0545');
   }  else if ( timeleft === 20) {
     console.log('you win');
     $('.cloud').stop().remove();

@@ -546,6 +546,7 @@ let createLifeGlobes;
 let playing;
 let timeleft = 0;
 let timer;
+let backgroundInterval;
 
 let $character;
 let $score;
@@ -590,7 +591,6 @@ function start() {
   $youWin.hide();
   $youWin.hide();
   $reset.hide();
-
 }
 
 function begin() {
@@ -881,12 +881,16 @@ function startTimer () {
 function checkValue() {
   if ( timeleft === 5 ) {
     $level.html('2');
+    $('body').css('background', '#7eb8df');
   } else if  ( timeleft === 10 ) {
     $level.html('3');
+    $('body').css('background', '#b01846');
   } else if  ( timeleft === 15) {
     $level.html('4');
+    $('body').css('background', '#551183');
   }  else if  ( timeleft === 18 ) {
     $level.html('5');
+    $('body').css('background', '#2b0545');
   }  else if ( timeleft === 20) {
     console.log('you win');
     $('.cloud').stop().remove();
@@ -11344,7 +11348,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "html, body {\n  height: 100%;\n  min-height: 100%;\n}\n\n.sky {\n  /*background: url(../images/backgroundgame.png);\n  background-repeat: no-repeat;\n  background-size: cover;*/\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n  background: lightblue;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n.transition-screen {\n  position: fixed;\n  width: 100%;\n  text-align: center;\n  /*background-position: center;\n  background-repeat: no-repeat;*/\n  height: 100vh;\n  z-index: 1;\n  background: white;\n}\n\n.transition-screen img {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 70%;\n}\n\n.game-over {\n  display: none;\n}\n\n.game-over img {\n  width: 55%;\n}\n\n.winner-screen {\n  display: none;\n}\n\n.play-btns {\n  text-align: center;\n  width: 100%;\n  background-image: linear-gradient(to right, #B993D6 0%, #faaca8 51%, #fdeff9 100%);\n  border:none;\n  width: 25%;\n  color:white;\n  position: absolute;\n  top: 70%;\n  left: 55%;\n  transform: translate(-50%, -50%);\n  border-radius: 2px;\n  font-size: 16px;\n  padding:6px;\n  z-index: 1;\n}\n\n.reset-button{\n  top: 23%;\n  left: 50%;\n  border-radius: 2px;\n}\n\n.play-btns:hover {\n  cursor: pointer;\n}\n\n.play-btns:focus {\n  outline: none;\n}\n\n#character {\n  background: url(" + __webpack_require__(11) + ");\n  position: absolute;\n  background-repeat: no-repeat;\n  bottom: 0;\n  width: 50px;\n  height: 100px;\n}\n\n.cloud {\n  right: 0;\n  background: url(" + __webpack_require__(12) + ");\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: contain;\n  position: absolute;\n  border-radius: 100px;\n}\n\n.img{\n  background:rgba(0,0,0,0.6);\n}\n\n\n.circle{\n  right: 0;\n  position: absolute;\n  background: green;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\n}\n\n.lifeGlobe{\n  color :#fff;\n  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  width: 200px;\n  height: 200px;\n  line-height: 200px;\n  text-align: center;\n  position: absolute;\n  right: 0;\n}\n\n/*\n\n.sky {\nmargin: 0 auto;\nwidth: 600px;\nheight: 600px;\nbackground: lightblue;\nposition: relative;\n}\n\n#character {\nmargin: 0 auto;\nwidth: 100px;\nleft:0;\nbottom: 0;\nheight: 100px;\nbackground: red;\nposition: absolute;\n}\n\n.title_screen{\ntext-align: center;\nmargin-left: 50px;\nmargin-right:50px;\nwidth:0px;\nheight:0px;\nborder-left: 300px solid transparent;\nborder-right:300px solid transparent;\nborder-top: 300px solid transparent;\nborder-radius: px;\nposition:relative;\nmargin:auto;\ntop:5px;\nleft:2px;\n}\n\nimg {\nheight: 5%;\nwidth: 5%;\nmargin: 10px\n\n}\ndiv.heart2{\ntop:auto;\n}\n#game-over{\nheight: 100vh;\nwidth: 100%;\nposition: fixed;\nbackground: white;\ntop: 0;\ndisplay: none;\n}\n#reset-button{\nheight: 100px;\nwidth: 100px;\nposition: fixed;\nbackground: white;\ntop: 0;\ndisplay: none;\n}\n\n#heart_style {\nfloat: left;\n}\n\n\n/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/\n/*body {\n\nbackground: white;\n\n}\n\n#background-wrap {\nbottom: 0;\nleft: 0;\npadding-top: 50px;\nposition: fixed;\nright: 0;\ntop: 0;\nz-index: -1;\n}\n\n\n/* OBJECTS */\n\n\n/*.cloud {\nbackground: #fff;\nbackground: linear-gradient(top,  #fff 5%,#f1f1f1 100%);\nborder-radius: 100px;\nbox-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);\nheight: 120px;\nposition: absolute;\nwidth: 250px;\nshape-outside: square();\n}*/\n", ""]);
+exports.push([module.i, "\n\nhtml, body {\n  width: 100%;\n  height: 100%;\n  min-height: 100%;\n}\n\nbody {\n  /*background: url(../images/backgroundgamegood.png) no-repeat fixed;\n  height: 100%;\n  width:auto;\n  -webkit-background-size: cover;\n  -moz-background-size: cover;\n  -o-background-size: cover;\n  background-size: cover;*/\n  background: #7986AC;\n  transition: background 8s;\n  color: white;\n}\n\n\n\n.sky {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  float: left;\n  overflow: hidden;\n}\n\n#heart_style {\n  float: right;\n  height: 300px;\n  width: 50px;\n  text-align: center;\n  z-index: 9;\n}\n\n.heart {\n  width: 50px;\n}\n\n.transition-screen {\n  position: fixed;\n  width: 100%;\n  text-align: center;\n  /*background-position: center;\n  background-repeat: no-repeat;*/\n  height: 100vh;\n  z-index: 1;\n  background: white;\n}\n\n.transition-screen img {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 70%;\n}\n\n.game-over {\n  display: none;\n}\n\n.game-over img {\n  width: 55%;\n}\n\n.winner-screen {\n  display: none;\n}\n\n.play-btns {\n  text-align: center;\n  width: 100%;\n  background-image: linear-gradient(to right, #B993D6 0%, #faaca8 51%, #fdeff9 100%);\n  border:none;\n  width: 25%;\n  color:white;\n  position: absolute;\n  top: 70%;\n  left: 55%;\n  transform: translate(-50%, -50%);\n  border-radius: 2px;\n  font-size: 16px;\n  padding:6px;\n  z-index: 1;\n}\n\n.reset-button{\n  top: 23%;\n  left: 50%;\n  border-radius: 2px;\n}\n\n.play-btns:hover {\n  cursor: pointer;\n}\n\n.play-btns:focus {\n  outline: none;\n}\n\n#character {\n  background: url(" + __webpack_require__(11) + ");\n  position: absolute;\n  background-repeat: no-repeat;\n  bottom: 0;\n  width: 50px;\n  height: 100px;\n}\n\n.cloud {\n  right: 0;\n  background: url(" + __webpack_require__(12) + ");\n  background-position: center;\n  background-size: 120%;\n  background-repeat: no-repeat;\n  background-size: contain;\n  position: absolute;\n  border-radius: 100px;\n}\n\n.img{\n  background:rgba(0,0,0,0.6);\n}\n\n\n.circle{\n  /*right: 0;\n  color :#fff;\n  position: absolute;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  width: 200px;\n  height: 200px;\n  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px yellow, 0 30px yellow , 0 0 40px #FFFFAA, 0 0 55px #FFFFAA, 0 0 75px #FFFFAA;\n  line-height: 200px;\n  text-align: center;\n  position: absolute;*/\n  color :#fff;\n  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #FFFFAA, 0 0 30px #FFFFAA, 0 0 40px #FFFFAA, 0 0 55px #FFFFAA, 0 0 75px #FFFFAA;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  width: 200px;\n  height: 200px;\n  line-height: 200px;\n  text-align: center;\n  position: absolute;\n  right: 0;\n\n}\n\n.lifeGlobe{\n  color :#fff;\n  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;\n  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);\n  border-radius: 100px;\n  width: 200px;\n  height: 200px;\n  line-height: 200px;\n  text-align: center;\n  position: absolute;\n  right: 0;\n}\n", ""]);
 
 // exports
 

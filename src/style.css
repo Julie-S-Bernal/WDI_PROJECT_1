@@ -1,18 +1,32 @@
+
+
 html, body {
+  width: 100%;
   height: 100%;
   min-height: 100%;
 }
 
-.sky {
-  /*background: url(../images/backgroundgame.png);
-  background-repeat: no-repeat;
+body {
+  /*background: url(../images/backgroundgamegood.png) no-repeat fixed;
+  height: 100%;
+  width:auto;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;*/
+  background: #7986AC;
+  transition: background 8s;
+  color: white;
+}
+
+
+
+.sky {
   width: 100%;
   height: 100%;
   position: relative;
   float: left;
   overflow: hidden;
-  background: lightblue;
 }
 
 #heart_style {
@@ -102,6 +116,7 @@ html, body {
   right: 0;
   background: url(../images/cloud.png);
   background-position: center;
+  background-size: 120%;
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;
@@ -114,12 +129,28 @@ html, body {
 
 
 .circle{
-  right: 0;
+  /*right: 0;
+  color :#fff;
   position: absolute;
-  background: green;
   background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);
   border-radius: 100px;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  height: 200px;
+  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px yellow, 0 30px yellow , 0 0 40px #FFFFAA, 0 0 55px #FFFFAA, 0 0 75px #FFFFAA;
+  line-height: 200px;
+  text-align: center;
+  position: absolute;*/
+  color :#fff;
+  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #FFFFAA, 0 0 30px #FFFFAA, 0 0 40px #FFFFAA, 0 0 55px #FFFFAA, 0 0 75px #FFFFAA;
+  background: linear-gradient(top,  #fff 5%, #f1f1f1 100%);
+  border-radius: 100px;
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
+  text-align: center;
+  position: absolute;
+  right: 0;
+
 }
 
 .lifeGlobe{
@@ -134,102 +165,3 @@ html, body {
   position: absolute;
   right: 0;
 }
-
-/*
-
-.sky {
-margin: 0 auto;
-width: 600px;
-height: 600px;
-background: lightblue;
-position: relative;
-}
-
-#character {
-margin: 0 auto;
-width: 100px;
-left:0;
-bottom: 0;
-height: 100px;
-background: red;
-position: absolute;
-}
-
-.title_screen{
-text-align: center;
-margin-left: 50px;
-margin-right:50px;
-width:0px;
-height:0px;
-border-left: 300px solid transparent;
-border-right:300px solid transparent;
-border-top: 300px solid transparent;
-border-radius: px;
-position:relative;
-margin:auto;
-top:5px;
-left:2px;
-}
-
-img {
-height: 5%;
-width: 5%;
-margin: 10px
-
-}
-div.heart2{
-top:auto;
-}
-#game-over{
-height: 100vh;
-width: 100%;
-position: fixed;
-background: white;
-top: 0;
-display: none;
-}
-#reset-button{
-height: 100px;
-width: 100px;
-position: fixed;
-background: white;
-top: 0;
-display: none;
-}
-
-#heart_style {
-float: left;
-}
-
-
-/*parallax animation link https://www.youtube.com/watch?v=lbAijXD2gHk*/
-/*body {
-
-background: white;
-
-}
-
-#background-wrap {
-bottom: 0;
-left: 0;
-padding-top: 50px;
-position: fixed;
-right: 0;
-top: 0;
-z-index: -1;
-}
-
-
-/* OBJECTS */
-
-
-/*.cloud {
-background: #fff;
-background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);
-border-radius: 100px;
-box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-height: 120px;
-position: absolute;
-width: 250px;
-shape-outside: square();
-}*/
