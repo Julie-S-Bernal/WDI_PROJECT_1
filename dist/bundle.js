@@ -597,14 +597,14 @@ function begin() {
   playing = true;
   lives = 5;
   const level = 1;
-  defaultScore = 500;
+  defaultScore = 0;
   $level.html(level);
   $sky.show();
   $score.html(defaultScore);
   $gameOver.hide();
   $hearts.attr('src', 'images/heart.png');
   startCreatingClouds = setInterval(createCloud, 250);
-  CreateCircles = setInterval(createCircle, 2000);
+  CreateCircles = setInterval(createCircle, 500);
   createLifeGlobes = setInterval(createLifeGlobe, 800);
   $youWin.hide();
 
@@ -849,7 +849,6 @@ function moveLifeGlobe(lifeGlobe) {
         const $div1 = lifeGlobe;
         const $div2 = $character;
 
-        // console.log($div1, $div2);
 
         if (detectCollision($div1, $div2)) {
           $div1.remove();
@@ -872,7 +871,6 @@ function startTimer () {
   timer = setInterval(() => {
     timeleft ++;
     console.log(timeleft);
-    // console.log(timeleft);
     checkValue();
   }, 1000);
   // end timer
