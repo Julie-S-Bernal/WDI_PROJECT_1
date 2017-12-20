@@ -648,7 +648,6 @@ function moveCloud(cloud) {
         const $div2 = $character;
 
         if (detectCollision($div1, $div2)) {
-          console.log('i have hit a cloud blob');
           $div1.remove();
 
           defaultScore -= 50;
